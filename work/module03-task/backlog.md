@@ -107,7 +107,7 @@
 - [x] Mock non-2xx responses and authentication failures and verify clear errors with no output file.
 - [ ] Mock malformed or incomplete API payloads and verify controlled handling.
 - [ ] Run an end-to-end test with fixture responses and assert the complete report structure, RAG status, metrics, and output path.
-- [ ] Run the test suite from the project directory using the documented command.
+- [x] Run the test suite from the project directory using the documented command. GitHub issue #2.
 
 ## Documentation
 
