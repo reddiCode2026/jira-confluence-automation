@@ -10,16 +10,17 @@
             ]
         },
         "epam-jira": {
-            "command": "npx",
+            "command": "powershell",
             "args": [
-                "-y",
-                "ff-mcp-jira"
-            ],
-            "env": {
-                "JIRA_BASE_URL": "${env:JIRA_SITE_URL}",
-                "JIRA_API_TOKEN": "${env:JIRA_API_TOKEN}",
-                "JIRA_AUTH_MODE": "bearer"
-            }
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "./.vscode/mcp-jira.ps1"
+            ]
+        },
+        "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/"
         }
     }
 }
