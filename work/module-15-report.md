@@ -1,15 +1,22 @@
+# Module 15 Completion Report
+
+## Script Metadata
+- Filename: validate_walkthroughs.py
+- Language: Python
+- Purpose: Recursively scans every `walkthrough.md` file in the `modules` directory, validates required section headings against the repo validation rules, and writes a consolidated report to `./modules/missing_section_report.txt`.
+
+## Script Contents
+```python
 #!/usr/bin/env python3
-"""Validate all matching files under a target directory tree.
+"""Validate all walkthrough.md files under the modules tree.
 
 This follows the repo rule set in instructions/validation-rules.md and writes a
-single consolidated report to the requested output path.
+single consolidated report to ./modules/missing_section_report.txt.
 """
 
 from __future__ import annotations
 
-import argparse
 import re
-from datetime import datetime
 from pathlib import Path
 
 REQUIRED_SECTIONS = [
@@ -114,58 +121,34 @@ def build_report(entries: list[dict], report_path: Path) -> str:
     return "\n".join(lines) + "\n"
 
 
-def parse_args() -> argparse.Namespace:
-    """Parse command-line arguments for the validator."""
-    parser = argparse.ArgumentParser(
-        description="Validate files matching a target filename pattern in a directory tree."
-    )
-    parser.add_argument(
-        "--directory",
-        default="modules",
-        help="Directory to scan recursively (default: modules).",
-    )
-    parser.add_argument(
-        "--report-name",
-        default="missing_section_report.txt",
-        help="Name of the consolidated report file to create (default: missing_section_report.txt).",
-    )
-    parser.add_argument(
-        "--file-name",
-        default="walkthrough.md",
-        help="Filename pattern to match (default: walkthrough.md).",
-    )
-    return parser.parse_args()
-
-
-def choose_report_path(target_dir: Path, report_name: str) -> Path:
-    """Return a unique report path, adding a timestamp when the file already exists."""
-    base_path = (target_dir / report_name).resolve()
-    if not base_path.exists():
-        return base_path
-
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    stem = base_path.stem
-    suffix = base_path.suffix
-    return base_path.with_name(f"{stem}_{timestamp}{suffix}")
-
-
 def main() -> int:
-    """Validate all matching files and write a consolidated report."""
-    args = parse_args()
+    """Validate all walkthrough files and write a consolidated report."""
     repo_root = Path(__file__).resolve().parents[1]
-    target_dir = (repo_root / args.directory).resolve()
-    report_path = choose_report_path(target_dir, args.report_name)
+    modules_dir = repo_root / "modules"
+    report_path = modules_dir / "missing_section_report.txt"
 
-    matching_files = sorted(target_dir.rglob(args.file_name))
-    entries = [validate_walkthrough(path) for path in matching_files]
+    walkthroughs = sorted(modules_dir.rglob("walkthrough.md"))
+    entries = [validate_walkthrough(path) for path in walkthroughs]
     report_content = build_report(entries, report_path)
     report_path.write_text(report_content, encoding="utf-8")
 
     failed = sum(1 for entry in entries if entry["status"] == "FAIL")
     print(f"Generated report: {report_path}")
-    print(f"Processed {len(entries)} matching files; {failed} failed.")
+    print(f"Processed {len(entries)} walkthrough files; {failed} failed.")
     return 0 if failed == 0 else 1
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+```
+
+## Parameters
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| None | The script runs without command-line arguments and automatically scans all `walkthrough.md` files under `modules/` recursively. | N/A |
+
+## Test Run Output
+```text
+Generated report: C:\workspace\hello-genai\modules\missing_section_report.txt
+Processed 11 walkthrough files; 11 failed.
+```

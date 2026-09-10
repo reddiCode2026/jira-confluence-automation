@@ -1,0 +1,368 @@
+Walkthrough Validation Report
+============================
+Generated report file path: C:\workspace\hello-genai\modules\missing_section_report_20260910-135441.txt
+
+File 1:
+Full walkthrough path: C:\workspace\hello-genai\modules\module1\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 2:
+Full walkthrough path: C:\workspace\hello-genai\modules\module10\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+- Step-by-Step Instructions
+- Success Criteria
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Missing
+- Success Criteria: Missing
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 3:
+Full walkthrough path: C:\workspace\hello-genai\modules\module11\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+- Step-by-Step Instructions
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Missing
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 4:
+Full walkthrough path: C:\workspace\hello-genai\modules\module2\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 5:
+Full walkthrough path: C:\workspace\hello-genai\modules\module3\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 6:
+Full walkthrough path: C:\workspace\hello-genai\modules\module4\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+- Step-by-Step Instructions
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Missing
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 7:
+Full walkthrough path: C:\workspace\hello-genai\modules\module5\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 8:
+Full walkthrough path: C:\workspace\hello-genai\modules\module6\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 9:
+Full walkthrough path: C:\workspace\hello-genai\modules\module7\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 10:
+Full walkthrough path: C:\workspace\hello-genai\modules\module8\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+File 11:
+Full walkthrough path: C:\workspace\hello-genai\modules\module9\walkthrough.md
+Validation status: FAIL
+
+Required sections:
+- Summary
+- Quiz
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Present sections:
+- Prerequisites
+- Step-by-Step Instructions
+- Success Criteria
+- Troubleshooting
+- Next Steps
+
+Missing sections:
+- Summary
+- Quiz
+
+Section-by-section summary:
+- Summary: Missing
+- Quiz: Missing
+- Prerequisites: Present
+- Step-by-Step Instructions: Present
+- Success Criteria: Present
+- Troubleshooting: Present
+- Next Steps: Present
+
+Overall result: 11 files processed, 11 failed, 0 passed
