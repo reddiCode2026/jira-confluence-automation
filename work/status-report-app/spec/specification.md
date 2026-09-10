@@ -3,13 +3,127 @@
 ## Document Control
 
 - **Product:** status-report-app
-- **Version:** 1.0.0
+- **Version:** 1.1.0
 - **Status:** Draft for implementation
 - **Date:** 2026-09-10
-- **Technology baseline:** React 18 + Vite frontend; Node.js + Express
+- **Technology baseline:** React 18 + Vite frontend; Node.js 24.21.0 + Express
   backend; PostgreSQL 15 through Docker when persistence is enabled.
+- **Verified tooling:** npm 11.19.0; Docker 29.7.2.
 - **Governing constitution:** [constitution.md](./constitution.md)
 - **Source specification:** `work/module03-task/project_spec.md`
+
+## Project Identity
+
+### Name
+
+**status-report-app**
+
+### Purpose
+
+The application generates a consistent stakeholder-facing weekly status report
+for one Jira project. It retrieves live Jira Cloud data, calculates metrics and
+deterministic RAG health, presents the result in a React interface, and
+produces Markdown that a Project Manager can share manually.
+
+### Target Users
+
+- **Primary user:** Project Manager responsible for preparing a weekly update
+  for a 10-person Agile Scrum team.
+- **Secondary audience:** External or upward stakeholders who need to scan
+  progress, risks, blockers, and overall project health.
+
+## Technology Stack and Versions
+
+The implementation MUST use the following stack:
+
+| Layer | Technology | Required version |
+|---|---|---|
+| Frontend | React | 18.x |
+| Frontend tooling | Vite | Version MUST be pinned in `client/package.json` before implementation |
+| Backend runtime | Node.js | 24.21.0 |
+| Backend framework | Express | Version MUST be pinned in `server/package.json` before implementation |
+| Database | PostgreSQL | 15.x |
+| Local database | Docker | 29.7.2 verified locally; compatible Docker versions are acceptable for contributors |
+| Package manager | npm | 11.19.0 verified locally |
+| External integration | Jira Cloud REST API v3 | Version 3 |
+
+`client/package.json` and `server/package.json` MUST declare exact dependency
+versions or an approved lockfile. The Vite and Express versions are currently
+open implementation decisions because the existing manifests do not yet declare
+them; they MUST be resolved before the first implementation commit.
+
+## Folder Structure Conventions
+
+The repository MUST use this structure:
+
+```text
+status-report-app/
+  client/
+    package.json
+    vite.config.js
+    src/
+      components/       # Reusable React presentation components
+      pages/            # Route-level page components
+      services/         # Browser-side API clients only
+      App.jsx
+      main.jsx
+  server/
+    package.json
+    .env.example
+    src/
+      config/           # Environment and application configuration
+      controllers/      # HTTP request/response orchestration
+      routes/           # Express route declarations
+      services/         # Domain logic and Jira integration
+      templates/        # Markdown/report templates
+      utils/            # Small shared backend utilities
+    reports/            # Generated files only, when filesystem output is used
+  tests/                # Cross-module and integration tests
+  spec/                 # Constitution, specification, plans, and decisions
+```
+
+- `client/src` MUST contain frontend code only.
+- `server/src` MUST contain backend code only; routes, controllers, services,
+  configuration, integrations, and data access MUST remain responsibility-
+  focused.
+- `tests` MUST contain automated tests and SHOULD mirror the module or behavior
+  under test.
+- `server/reports` MUST contain generated report artifacts only and MUST NOT
+  contain source modules.
+- `spec` MUST contain project specifications and planning artifacts, not runtime
+  code.
+- Root-level files MUST be limited to project-wide configuration, onboarding,
+  and operational metadata.
+
+## Coding Standards
+
+### Naming
+
+- JavaScript variables, functions, and React props MUST use `camelCase`.
+- React components and classes MUST use `PascalCase`.
+- Configuration and domain-threshold constants MUST use `UPPER_SNAKE_CASE`.
+- **File naming:** React component files MUST use `PascalCase.jsx`.
+- Services, routes, controllers, configuration, utilities, and test files MUST
+  use descriptive `camelCase.js` or lowercase names consistently within their
+  directory.
+- Names MUST describe responsibility and MUST NOT use unexplained abbreviations.
+
+### File organization and boundaries
+
+- **Single responsibility:** Each file MUST have one primary responsibility.
+- React components MUST focus on presentation, interaction, accessibility, and
+  request state; they MUST NOT contain Jira queries, persistence logic, or
+  report-calculation rules.
+- Controllers MUST translate HTTP requests and responses and delegate business
+  behavior to services or domain modules.
+- Jira field mapping MUST remain in the Jira adapter/integration layer.
+- Database access MUST remain behind a server-side data-access module.
+- Shared behavior MUST be extracted into a named module rather than duplicated.
+- **Validation and quality gates:** Boundary functions MUST validate inputs and
+  return the documented API error shape. Formatting, linting, and automated
+  tests MUST pass before a change is ready for review.
+- Secrets MUST never appear in source literals, filenames, logs, tests, or
+  fixtures.
 
 ## Problem/Purpose
 

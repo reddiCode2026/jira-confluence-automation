@@ -9,6 +9,11 @@ status report from Jira Cloud data through a React frontend and an Express
 backend, with PostgreSQL 15 available through Docker when persistence is
 required.
 
+The primary target user is a Project Manager who needs to generate and share a
+consistent weekly status update. The secondary audience is external or upward
+stakeholders who consume the report to understand progress, risks, blockers,
+and overall project health.
+
 ## Core Principles
 
 ### I. Specification and Stakeholder Value First
@@ -80,6 +85,53 @@ MUST provide actionable context for failures without recording secrets or
 unnecessary Jira payloads. Health checks and configuration validation SHOULD be
 provided for services that run independently.
 
+### IX. Consistent Project Structure and Coding Standards
+
+The repository MUST follow the established separation between client, server,
+specification, tests, and generated artifacts. New files MUST be placed in the
+directory that owns their responsibility rather than creating parallel or
+duplicate structures.
+
+The project structure MUST follow these conventions:
+
+- `client/` contains the React 18 and Vite frontend only.
+- `client/src/` contains frontend application code, organized by feature or
+   responsibility. Components MUST remain presentation-focused.
+- `server/` contains the Node.js and Express backend only.
+- `server/src/` contains backend application code, with routes/controllers,
+   services/domain logic, integrations, configuration, and data-access modules
+   kept in separate responsibility-focused directories.
+- `server/reports/` contains generated report artifacts when filesystem report
+   output is enabled; generated files MUST NOT be mixed with source code.
+- `tests/` contains automated tests and MUST mirror the behavior or module area
+   under test where practical.
+- `spec/` contains the constitution, product specifications, plans, and related
+   implementation artifacts.
+- Root-level files MUST be limited to project-wide configuration, onboarding,
+   and operational metadata.
+
+Coding standards MUST follow these rules:
+
+- JavaScript variables, functions, and React component props MUST use
+   `camelCase`; React component and class names MUST use `PascalCase`.
+- Constants whose values are not reassigned MUST use `UPPER_SNAKE_CASE` when
+   they represent configuration or domain thresholds.
+- File names MUST use one consistent convention within each area: PascalCase
+   for React component files and camelCase or lowercase names for services,
+   utilities, routes, configuration, and tests. New modules MUST use descriptive
+   names rather than abbreviations.
+- Each file MUST have one primary responsibility. Shared behavior MUST be
+   extracted into a named module instead of duplicated across components,
+   controllers, or tests.
+- React components MUST not contain Jira queries, persistence logic, or report
+   calculation rules. Backend controllers MUST delegate business logic to
+   services or domain modules.
+- API, service, and data-access functions MUST validate inputs at their
+   boundary and return consistent error shapes. Secrets and raw credentials MUST
+   never appear in names, source literals, logs, tests, or fixtures.
+- Formatting, linting, and test commands defined by the project MUST pass
+   before a change is considered ready for review.
+
 ## Technical Constraints
 
 - Frontend: React 18 with Vite.
@@ -131,6 +183,6 @@ Constitution changes MUST:
 The constitution MUST be reviewed whenever the product scope, data sensitivity,
 external integrations, persistence model, or deployment model changes.
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Ratified**: 2026-09-10  
 **Last Amended**: 2026-09-10
