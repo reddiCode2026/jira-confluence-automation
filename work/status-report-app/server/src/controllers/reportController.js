@@ -8,6 +8,9 @@ function createReportController(reportService) {
 				const report = await reportService.generate({ projectKey, reportDate });
 				response.status(200).json({ ...report, reportFile: { path: `server/reports/${report.filename}`, url: `/reports/${report.filename}` } });
 			} catch (error) {
+				if (error.code === 'INVALID_REPORT_DATE') {
+					return response.status(400).json({ error: { code: error.code, message: error.message } });
+				}
 				next(error);
 			}
 		},

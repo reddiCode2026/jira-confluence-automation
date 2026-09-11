@@ -42,7 +42,22 @@ app.use('/api', createReportRoutes(createReportController(reportService)));
 
 app.use((error, _request, response, _next) => {
 	console.error(error.message);
-	response.status(500).json({ error: { message: 'Unable to generate the report.' } });
+	const isConfigurationError = error.message.startsWith('Missing required configuration:');
+	const isJiraAuthenticationError = error.code === 'JIRA_AUTHENTICATION_FAILED';
+	response.status(isJiraAuthenticationError ? 502 : 500).json({
+		 error: {
+			code: isConfigurationError
+				? 'MISSING_CONFIGURATION'
+				: isJiraAuthenticationError
+					? 'JIRA_AUTHENTICATION_FAILED'
+					: 'REPORT_GENERATION_FAILED',
+			message: isConfigurationError
+				? 'Jira configuration is missing. Create server/.env from server/.env.example and provide Jira credentials.'
+				: isJiraAuthenticationError
+					? 'Jira rejected the configured credentials. Update server/.env with a valid email and API token, then restart Docker.'
+				: 'Unable to generate the report.'
+		}
+	});
 });
 
 app.listen(port, '0.0.0.0', () => {

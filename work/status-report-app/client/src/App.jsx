@@ -5,6 +5,14 @@ function todayUtc() {
 	return new Date().toISOString().slice(0, 10);
 }
 
+function normalizeReportDate(value) {
+	if (/^\d{2}-\d{2}-\d{4}$/.test(value)) {
+		const [day, month, year] = value.split('-');
+		return `${year}-${month}-${day}`;
+	}
+	return value;
+}
+
 export default function App() {
 	const [projectKey, setProjectKey] = useState('EPMCDMETST');
 	const [reportDate, setReportDate] = useState(todayUtc());
@@ -18,7 +26,8 @@ export default function App() {
 		setReport(null);
 		setIsLoading(true);
 		try {
-			setReport(await generateReport({ projectKey: projectKey.trim(), reportDate }));
+			const normalizedReportDate = normalizeReportDate(reportDate);
+			setReport(await generateReport({ projectKey: projectKey.trim(), reportDate: normalizedReportDate }));
 		} catch (requestError) {
 			setError(requestError.message);
 		} finally {
@@ -50,14 +59,6 @@ export default function App() {
 					<pre>{report.markdown}</pre>
 				</section>
 			)}
-		</main>
-	);
-}
-export default function App() {
-	return (
-		<main>
-			<h1>Weekly Status Report</h1>
-			<p>Docker-local React client is running.</p>
 		</main>
 	);
 }

@@ -2,12 +2,18 @@ const utcDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 
 function createReportWindow(reportDate) {
 	if (!utcDatePattern.test(reportDate)) {
-		throw new Error('reportDate must use YYYY-MM-DD format');
+		const error = new Error('reportDate must use YYYY-MM-DD format');
+		error.code = 'INVALID_REPORT_DATE';
+		error.statusCode = 400;
+		throw error;
 	}
 
 	const end = new Date(`${reportDate}T23:59:59.999Z`);
 	if (Number.isNaN(end.valueOf())) {
-		throw new Error('reportDate must be a valid calendar date');
+		const error = new Error('reportDate must be a valid calendar date');
+		error.code = 'INVALID_REPORT_DATE';
+		error.statusCode = 400;
+		throw error;
 	}
 
 	const start = new Date(end);

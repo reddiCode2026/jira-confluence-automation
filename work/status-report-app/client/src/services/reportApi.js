@@ -7,9 +7,15 @@ async function generateReport({ projectKey, reportDate }) {
 		body: JSON.stringify({ projectKey, reportDate }),
 	});
 
-	const payload = await response.json();
+	const responseText = await response.text();
+	let payload = {};
+	try {
+		payload = responseText ? JSON.parse(responseText) : {};
+	} catch {
+		payload = {};
+	}
 	if (!response.ok) {
-		throw new Error(payload.error?.message || 'Unable to generate the report.');
+		throw new Error(payload.error?.message || `Report generation failed with status ${response.status}.`);
 	}
 	return payload;
 }

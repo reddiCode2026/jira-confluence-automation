@@ -11,7 +11,10 @@ function createJiraClient(config, fetchImplementation = fetch) {
 		});
 
 		if (!response.ok) {
-			throw new Error(`Jira request failed with status ${response.status}`);
+			const error = new Error(`Jira request failed with status ${response.status}`);
+			error.code = response.status === 401 ? 'JIRA_AUTHENTICATION_FAILED' : 'JIRA_UPSTREAM_FAILED';
+			error.statusCode = response.status === 401 ? 502 : 502;
+			throw error;
 		}
 
 		const payload = await response.json();
