@@ -146,10 +146,12 @@ sections, Markdown, and generated report file link.
 
 **Acceptance criteria:**
 
-- The response does not include `health` or `metrics` objects.
+- The response contains report sections only and does not include `health` or
+  `metrics` objects.
 - The project object contains the Project Key only.
 - The response includes `createdItems`, `completed`, and `blockers` sections.
-- The response includes Markdown and the timestamped report file link.
+- The response includes Markdown and a URL link to the timestamped report file
+  under `server/reports/`.
 
 ## Phase 2: Jira Integration
 
@@ -178,6 +180,8 @@ Create a server-side Jira REST client using `JIRA_SITE_URL`, `JIRA_EMAIL`, and
 - Jira requests use server-side authentication.
 - Non-2xx responses become safe application errors.
 - Tests use mocked HTTP responses.
+- Jira status filtering MUST use the Jira status category field, including
+  `status = Done` for completed-item filtering.
 
 ### T-013: Query canonical report issues
 
@@ -191,8 +195,12 @@ field falls within the UTC seven-day window.
 - Project filtering uses the supplied Project Key.
 - Created filtering uses the calculated window.
 - Required Jira fields are requested: project, key, issuetype, summary, status,
-  assignee, created, reporter, StoryPoints when available, and blocker fields.
-- Results are scoped to the canonical report universe.
+  status category, assignee, created, reporter, and blocker fields. StoryPoints MUST be
+  requested from Jira custom field `cf[10004]` when available.
+- Status queries MUST filter by Jira status category, for example
+  `status = Done` for completed items.
+- Results are scoped to the canonical report universe of user stories and bugs
+  filtered by Jira Created date for the report window.
 
 ### T-014: Normalize Jira issues
 
@@ -203,9 +211,13 @@ Map Jira responses to the normalized issue model and deduplicate by issue key.
 **Acceptance criteria:**
 
 - Required normalized fields are present.
-- Jira `StoryPoints` maps to internal `storyPoints`.
+- Jira status and status category are normalized separately, with status
+  category used for report filtering.
+- Jira custom field `cf[10004]` maps to internal `storyPoints`.
 - Missing StoryPoints becomes `null` and does not remove the issue from listings.
 - Duplicate issue keys are retained once.
+- The normalized report universe contains only user stories and bugs whose
+  Created date falls within the report window.
 - Jira field names remain inside the adapter layer.
 
 ### T-015: Classify completed and blockers
@@ -216,7 +228,7 @@ Classify Done issues and current blockers within the canonical report universe.
 
 **Acceptance criteria:**
 
-- Completed items use Jira status `Done`.
+- Completed items use the Jira status category filter `status = Done`.
 - Blockers use Flagged `Impediment` or the `blocked` label.
 - Blocker duration and changelog analysis are not implemented.
 - Risk and at-risk classification are not implemented.
@@ -231,25 +243,30 @@ Implement the v1 point formulas.
 
 **Acceptance criteria:**
 
-- `completedPoints` equals the sum of StoryPoints for Done items.
-- `committedPoints` equals the sum of StoryPoints for all report items.
+- `completedPoints` equals the sum of StoryPoints for items matching the Jira
+  status category filter `status = Done`.
+- `committedPoints` equals the sum of StoryPoints for all user stories and bugs
+  filtered by Created date for the report window.
+- Both sums use normalized `storyPoints` sourced from Jira custom field
+  `cf[10004]`.
 - Missing StoryPoints are excluded from both sums.
 - Zero denominators produce finite values and no `NaN` or Infinity.
 - Status-count metrics are not calculated or exposed.
 
-### T-017: Calculate RAG status
+### T-017: Verify four-section report contract
 
 **Dependencies:** T-015, T-016
 
-Implement blocker precedence, 70% pace threshold, and unavailable pace behavior.
+Verify that report output is limited to the four sections defined by FR-005.
+Health and metrics are not report sections or API response objects in v1.
 
 **Acceptance criteria:**
 
-- Any blocker produces Red.
-- No blockers and pace below 70% produces Amber.
-- No blockers and pace at or above 70% produces Green.
-- Missing or zero committed points produces Unavailable pace.
-- No manual RAG override exists.
+- The report contains Header, Created User Stories and Bugs, Completed This
+  Week, and conditional Blockers / Impediments in that order.
+- No health section, health object, metrics section, or metrics object is
+  rendered or returned.
+- The task does not introduce RAG status output or status-count output.
 
 ### T-018: Render canonical Markdown
 
@@ -264,7 +281,8 @@ Render the four-section Markdown report in exact order.
 - Created and completed empty sections show `None`.
 - Blockers section is omitted when no blockers exist.
 - Dynamic Jira values are escaped safely for Markdown.
-- No HTML, PDF, status counts, blocker duration, or risk output is rendered.
+- No HTML, PDF, health, metrics, status counts, blocker duration, or risk
+  output is rendered.
 
 ### T-019: Generate report filenames
 
@@ -284,13 +302,17 @@ Generate UTC timestamp-suffixed filenames.
 
 **Dependencies:** T-018, T-019
 
-Write successful Markdown reports to `server/reports/` and return the file link.
+Write successful Markdown reports to `server/reports/` and return a URL link to
+the generated file location.
 
 **Acceptance criteria:**
 
 - Successful generation creates exactly one Markdown artifact.
 - Failed generation creates no partial artifact.
-- The API response links to the generated file.
+- The API response provides a usable URL for the generated file under
+  `server/reports/`.
+- The Express server serves the generated report location through a safe local
+  URL without allowing path traversal.
 - No persistence or database service is required.
 
 ### T-021: Build report generation form
@@ -315,8 +337,11 @@ Display the returned Markdown and generated artifact link.
 **Acceptance criteria:**
 
 - The UI displays the four report sections in the defined order.
+- The UI does not render a health section or metrics summary.
 - Markdown preview is available after success.
-- Download uses the timestamped filename.
+- The generated report location is shared through the returned URL link.
+- Download uses the timestamped filename and returned report URL.
+- The returned URL resolves to the Markdown file served from `server/reports/`.
 - No Jira credential appears in browser state or assets.
 
 ### T-023: Implement user-visible states
@@ -331,6 +356,7 @@ failure, and server-error states.
 - Duplicate submissions are prevented while generation is active.
 - Errors identify the affected operation without exposing secrets.
 - Empty sections use the defined placeholder behavior.
+- The UI does not expose health or metrics output as report sections.
 - A failed request does not leave stale successful output presented as current.
 
 ## Phase 5: Verification and Documentation
@@ -345,7 +371,10 @@ and filename generation.
 **Acceptance criteria:**
 
 - Tests cover Done-only completed sums.
-- Tests cover all-item committed sums.
+- Tests cover committed sums across all user stories and bugs filtered by
+  Created date for the report window.
+- Tests verify issues outside the Created-date report window are excluded from
+  `committedPoints`.
 - Tests cover missing StoryPoints and zero denominators.
 - Tests cover blocker, Amber, Green, and Unavailable outcomes.
 - Tests verify four-section Markdown order and escaping.
@@ -375,6 +404,8 @@ Run the complete local application through Docker.
 - Client and server start on the documented localhost ports.
 - A configured or mocked report flow completes successfully.
 - The generated Markdown file is present under `server/reports/`.
+- The returned report URL resolves to the generated file location.
+- A local request to the returned URL downloads the expected Markdown artifact.
 - No database container is started or required.
 - No secrets appear in logs or client output.
 
@@ -403,8 +434,11 @@ list.
 
 - No database, authentication, pagination, rate-limit, status-count, risk, or
   alternate-format implementation has been introduced.
+- No health or metrics report/API output has been introduced.
 - The four-section report contract is consistent across API, UI, renderer, and
   tests.
+- The final scope review confirms that Docker-local launch is the only supported
+  environment for v1; production deployment is out of scope.
 - All required acceptance criteria have corresponding tests.
 - Formatting, linting, build, and test gates pass.
 
